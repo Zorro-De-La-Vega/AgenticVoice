@@ -8,12 +8,14 @@ import ButtonCheckout from "./ButtonCheckout";
 const Pricing = () => {
   return (
     <section className="bg-base-200 overflow-hidden" id="pricing">
-      <div className="py-24 px-8 max-w-5xl mx-auto">
-        <div className="flex flex-col text-center w-full mb-20">
-          <p className="font-medium text-primary mb-8">Pricing</p>
-          <h2 className="font-bold text-3xl lg:text-5xl tracking-tight">
-            Save hours of repetitive code and ship faster!
+      <div className="py-24 px-8 max-w-6xl mx-auto">
+        <div className="flex flex-col text-center w-full mb-16">
+          <h2 className="font-extrabold text-3xl md:text-4xl lg:text-5xl tracking-tight mb-4">
+            Hire Your <span className="text-primary">AI Employee</span> Today
           </h2>
+          <p className="text-lg md:text-xl max-w-3xl mx-auto text-base-content/70">
+            Choose the right plan for your practice. All plans include training, implementation, and ongoing support.
+          </p>
         </div>
 
         <div className="relative flex justify-center flex-col lg:flex-row items-center lg:items-stretch gap-8">
@@ -60,10 +62,12 @@ const Pricing = () => {
                   <p className={`text-5xl tracking-tight font-extrabold`}>
                     ${plan.price}
                   </p>
-                  <div className="flex flex-col justify-end mb-[4px]">
-                    <p className="text-xs text-base-content/60 uppercase font-semibold">
-                      USD
-                    </p>
+                  <div className="flex flex-col justify-end">
+                    <div className="flex flex-col">
+                      <p className="text-xs text-base-content/60 uppercase font-semibold">
+                        USD/month
+                      </p>
+                    </div>
                   </div>
                 </div>
                 {plan.features && (
@@ -88,11 +92,13 @@ const Pricing = () => {
                     ))}
                   </ul>
                 )}
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <ButtonCheckout priceId={plan.priceId} />
 
                   <p className="flex items-center justify-center gap-2 text-sm text-center text-base-content/80 font-medium relative">
-                    Pay once. Access forever.
+                    {plan.name === "Professional" ? 
+                      "Most popular plan for single-location practices" : 
+                      "Monthly subscription with no long-term contract"}
                   </p>
                 </div>
               </div>

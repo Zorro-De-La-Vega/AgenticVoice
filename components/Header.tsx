@@ -5,29 +5,40 @@ import type { JSX } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import ButtonSignin from "./ButtonSignin";
 import logo from "@/app/icon.png";
 import config from "@/config";
+import AuthButtons from "./AuthButtons";
 
 const links: {
   href: string;
   label: string;
+  devOnly?: boolean;
 }[] = [
+  {
+    href: "/#features",
+    label: "Features",
+  },
+  {
+    href: "/#testimonials",
+    label: "Testimonials",
+  },
   {
     href: "/#pricing",
     label: "Pricing",
   },
   {
-    href: "/#testimonials",
-    label: "Reviews",
-  },
-  {
     href: "/#faq",
     label: "FAQ",
   },
+  {
+    href: "/performance",
+    label: "Performance",
+    devOnly: true,
+  },
 ];
 
-const cta: JSX.Element = <ButtonSignin extraStyle="btn-primary" />;
+// CTA button: Request Demo (primary)
+const demoCta: JSX.Element = <Link href="/#demo" className="btn btn-primary">Request Demo</Link>;
 
 // A header with a logo on the left, links in the center (like Pricing, etc...), and a CTA (like Get Started or Login) on the right.
 // The header is responsive, and on mobile, the links are hidden behind a burger button.
@@ -93,19 +104,24 @@ const Header = () => {
         {/* Your links on large screens */}
         <div className="hidden lg:flex lg:justify-center lg:gap-12 lg:items-center">
           {links.map((link) => (
-            <Link
-              href={link.href}
-              key={link.href}
-              className="link link-hover"
-              title={link.label}
-            >
-              {link.label}
-            </Link>
+            (!link.devOnly || process.env.NODE_ENV === 'development') && (
+              <Link
+                href={link.href}
+                key={link.href}
+                className="link link-hover"
+                title={link.label}
+              >
+                {link.label}
+              </Link>
+            )
           ))}
         </div>
 
-        {/* CTA on large screens */}
-        <div className="hidden lg:flex lg:justify-end lg:flex-1">{cta}</div>
+        {/* Auth buttons and CTA on large screens */}
+        <div className="hidden lg:flex lg:justify-end lg:flex-1 gap-4 items-center">
+          <AuthButtons />
+          {demoCta}
+        </div>
       </nav>
 
       {/* Mobile menu, show/hide based on menu state. */}
@@ -159,20 +175,25 @@ const Header = () => {
             <div className="py-4">
               <div className="flex flex-col gap-y-4 items-start">
                 {links.map((link) => (
-                  <Link
-                    href={link.href}
-                    key={link.href}
-                    className="link link-hover"
-                    title={link.label}
-                  >
-                    {link.label}
-                  </Link>
+                  (!link.devOnly || process.env.NODE_ENV === 'development') && (
+                    <Link
+                      href={link.href}
+                      key={link.href}
+                      className="link link-hover"
+                      title={link.label}
+                    >
+                      {link.label}
+                    </Link>
+                  )
                 ))}
               </div>
             </div>
             <div className="divider"></div>
-            {/* Your CTA on small screens */}
-            <div className="flex flex-col">{cta}</div>
+            {/* Auth buttons and CTA on small screens */}
+            <div className="flex flex-col gap-4">
+              <AuthButtons className="flex-col" />
+              {demoCta}
+            </div>
           </div>
         </div>
       </div>

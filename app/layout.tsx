@@ -6,6 +6,7 @@ import ClientLayout from "@/components/LayoutClient";
 import config from "@/config";
 import "./globals.css";
 
+
 const font = Inter({ subsets: ["latin"] });
 
 export const viewport: Viewport = {
@@ -26,9 +27,17 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 			data-theme={config.colors.theme}
 			className={font.className}
 		>
+			<head>
+				{/* Performance testing script - only loads in development mode */}
+				{process.env.NODE_ENV === 'development' && (
+					<script src="/scripts/perf-test.js" async defer />
+				)}
+			</head>
 			<body>
 				{/* ClientLayout contains all the client wrappers (Crisp chat support, toast messages, tooltips, etc.) */}
 				<ClientLayout>{children}</ClientLayout>
+				
+
 			</body>
 		</html>
 	);
