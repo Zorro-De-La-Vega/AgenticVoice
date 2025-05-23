@@ -1,22 +1,19 @@
 import { lazy } from 'react';
 import React from 'react';
 
-// Function to create a lazy-loaded component with type safety
+// Simple factory function for lazy-loaded components
 export function lazyLoad<T extends React.ComponentType<any>>(
-  importFn: () => Promise<{ default: T }>,
-  fallback: React.ReactNode = null
-): React.FC<React.ComponentProps<T>> {
+  importFn: () => Promise<{ default: T }>
+) {
   const LazyComponent = lazy(importFn);
   
-  const Component = (props: React.ComponentProps<T>): React.ReactElement => {
+  return function WithSuspense(props: any) {
     return (
-      <React.Suspense fallback={fallback}>
+      <React.Suspense fallback={<div>Loading...</div>}>
         <LazyComponent {...props} />
       </React.Suspense>
     );
   };
-  
-  return Component;
 }
 
 // Function to preload critical images
