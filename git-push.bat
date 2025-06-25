@@ -24,8 +24,16 @@ if "%commit_msg%"=="" (
 )
 
 echo.
-echo Pushing to GitHub repository: https://github.com/fenago/AgenticVoice
-git push -u origin main
+echo WARNING: This will FORCE PUSH to the repository, potentially overwriting remote changes.
+echo This makes the remote repository match your local repository exactly.
+set /p confirm="Are you sure you want to force push? (Y/N): "
+if /i "%confirm%"=="Y" (
+  echo Pushing to GitHub repository: https://github.com/fenago/AgenticVoice
+  git push -f -u origin main
+) else (
+  echo Force push canceled.
+  exit /b 1
+)
 
 echo.
 echo Done!
