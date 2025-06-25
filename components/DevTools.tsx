@@ -8,22 +8,17 @@ const DevTools = (): React.ReactElement | null => {
     // Only run in development mode
     if (process.env.NODE_ENV !== 'development') return;
     
-    // Dynamically import performance testing scripts
+    // Dynamically import performance testing script
     const perfScript = document.createElement('script');
-    perfScript.src = '/scripts/performance-test.js';
+    perfScript.src = '/scripts/perf-test.js';
     perfScript.async = true;
     document.body.appendChild(perfScript);
     
-    // Dynamically import accessibility testing scripts
-    const accessibilityScript = document.createElement('script');
-    accessibilityScript.src = '/scripts/test-checks.js';
-    accessibilityScript.async = true;
-    document.body.appendChild(accessibilityScript);
-    
     return () => {
-      // Clean up scripts when component unmounts
-      document.body.removeChild(perfScript);
-      document.body.removeChild(accessibilityScript);
+      // Clean up script when component unmounts
+      if (document.body.contains(perfScript)) {
+        document.body.removeChild(perfScript);
+      }
     };
   }, []);
   

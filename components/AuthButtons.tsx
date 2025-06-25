@@ -4,6 +4,7 @@ import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import config from "@/config";
+import { isAdmin } from "@/libs/auth-utils";
 
 interface AuthButtonsProps {
   className?: string;
@@ -51,6 +52,17 @@ export default function AuthButtons({ className = "" }: AuthButtonsProps) {
                 <span className="badge">New</span>
               </Link>
             </li>
+            <li>
+              <Link href="/test">Test Page</Link>
+            </li>
+            <li>
+              <Link href="/customer">Customer Portal</Link>
+            </li>
+            {isAdmin(session?.user) && (
+              <li>
+                <Link href="/admin">Admin Panel</Link>
+              </li>
+            )}
             <li>
               <a>Settings</a>
             </li>

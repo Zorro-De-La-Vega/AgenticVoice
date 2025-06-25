@@ -19,6 +19,36 @@ const nextConfig = {
     // Remove console logs in production
     removeConsole: process.env.NODE_ENV === 'production',
   },
+  webpack: (config, { isServer }) => {
+    // Fix for MongoDB DNS module resolution issue
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        dns: false,
+        net: false,
+        tls: false,
+        fs: false,
+        child_process: false,
+        'child_process': false,
+        'mongodb-client-encryption': false,
+        'aws4': false,
+        '@aws-sdk/credential-providers': false,
+        '@aws-sdk/credential-provider-imds': false,
+        '@aws-sdk/credential-provider-ini': false,
+        '@aws-sdk/credential-provider-node': false,
+        '@aws-sdk/credential-provider-process': false,
+        '@aws-sdk/credential-provider-sso': false,
+        '@aws-sdk/credential-provider-web-identity': false,
+        'snappy': false,
+        'kerberos': false,
+        '@mongodb-js/zstd': false,
+        'gcp-metadata': false,
+        'socks': false,
+      };
+    }
+    
+    return config;
+  },
 };
 
 module.exports = nextConfig;

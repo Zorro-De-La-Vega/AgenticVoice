@@ -45,7 +45,7 @@ const config = {
       {
         priceId:
           process.env.NODE_ENV === "development"
-            ? "price_1O5KtcAxyNprDp7iftKnrrpw"
+            ? "price_1O5KtcAxyNprDp7iftKnrrpw_professional"
             : "price_456",
         // This plan will look different on the pricing page, it will be highlighted. You can only have one plan with isFeatured: true
         isFeatured: true,
@@ -67,7 +67,7 @@ const config = {
       {
         priceId:
           process.env.NODE_ENV === "development"
-            ? "price_1O5KtcAxyNprDp7iftKnrrpw"
+            ? "price_1O5KtcAxyNprDp7iftKnrrpw_enterprise"
             : "price_789",
         name: "Enterprise",
         description: "Custom solution for large multi-location practices",

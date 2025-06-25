@@ -10,7 +10,15 @@ declare global {
 }
 
 const uri = process.env.MONGODB_URI;
-const options = {};
+const options = {
+  maxPoolSize: 10,
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+  connectTimeoutMS: 10000,
+  maxIdleTimeMS: 30000,
+  retryWrites: true,
+  w: 'majority' as const
+};
 
 let client: MongoClient | undefined;
 let clientPromise: Promise<MongoClient> | undefined;

@@ -35,6 +35,10 @@ const CTA = () => {
     agreeToTerms: false
   });
   
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  
   // Handle form input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type, checked } = e.target as HTMLInputElement;
@@ -42,15 +46,56 @@ const CTA = () => {
       ...prev,
       [name]: type === "checkbox" ? checked : value
     }));
+    
+    // Clear any previous error message when user makes changes
+    if (submitError) setSubmitError(null);
   };
   
   // Handle form submission
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Here you would typically send the data to your backend or email service
-    // For now, just display a success message
-    alert("Thank you! We'll contact you shortly to schedule your demo.");
+    setIsSubmitting(true);
+    setSubmitError(null);
+    
+    try {
+      // Send form data to the API endpoint
+      const response = await fetch('/api/demo', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+      
+      const result = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(result.error || result.message || 'Failed to submit demo request');
+      }
+      
+      // Show success message and reset form
+      setSubmitSuccess(true);
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        practiceType: "",
+        preferredTime: "",
+        message: "",
+        agreeToTerms: false
+      });
+      
+      // Reset success message after 5 seconds
+      setTimeout(() => {
+        setSubmitSuccess(false);
+      }, 5000);
+      
+    } catch (error: any) {
+      console.error('Error submitting demo request:', error);
+      setSubmitError(error.message || 'Something went wrong. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -113,6 +158,20 @@ const CTA = () => {
           <div className="bg-base-200 rounded-xl p-5 md:p-8 shadow-lg max-w-lg mx-auto md:ml-auto md:mr-0">
             <h3 className="text-2xl font-bold mb-6">Schedule Your Demo</h3>
             
+            {submitSuccess && (
+              <div className="alert alert-success mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <span>Thank you! We'll contact you shortly to schedule your demo.</span>
+              </div>
+            )}
+            
+            {submitError && (
+              <div className="alert alert-error mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <span>{submitError}</span>
+              </div>
+            )}
+            
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="form-control">
                 <label className="label">
@@ -125,6 +184,7 @@ const CTA = () => {
                   onChange={handleChange} 
                   className="input input-bordered w-full" 
                   placeholder="Dr. John Smith" 
+                  disabled={isSubmitting}
                   required 
                 />
               </div>
@@ -141,6 +201,7 @@ const CTA = () => {
                     onChange={handleChange} 
                     className="input input-bordered w-full" 
                     placeholder="doctor@example.com" 
+                    disabled={isSubmitting}
                     required 
                   />
                 </div>
@@ -156,6 +217,7 @@ const CTA = () => {
                     onChange={handleChange} 
                     className="input input-bordered w-full" 
                     placeholder="(555) 123-4567" 
+                    disabled={isSubmitting}
                     required 
                   />
                 </div>
@@ -170,6 +232,7 @@ const CTA = () => {
                   value={formData.practiceType} 
                   onChange={handleChange} 
                   className="select select-bordered w-full" 
+                  disabled={isSubmitting}
                   required
                 >
                   {practiceTypes.map(type => (
@@ -187,6 +250,7 @@ const CTA = () => {
                   value={formData.preferredTime} 
                   onChange={handleChange} 
                   className="select select-bordered w-full" 
+                  disabled={isSubmitting}
                   required
                 >
                   {timeSlots.map(slot => (
@@ -205,6 +269,7 @@ const CTA = () => {
                   onChange={handleChange} 
                   className="textarea textarea-bordered w-full" 
                   placeholder="Tell us about your practice's specific needs or challenges..." 
+                  disabled={isSubmitting}
                   rows={3}
                 ></textarea>
               </div>
@@ -217,16 +282,28 @@ const CTA = () => {
                     checked={formData.agreeToTerms} 
                     onChange={handleChange} 
                     className="checkbox checkbox-primary" 
+                    disabled={isSubmitting}
                     required 
                   />
                   <span className="label-text text-xs">
-                    I agree to AgenticVoice.net's <a href="#" className="text-primary hover:underline">Privacy Policy</a> and consent to being contacted about my demo request.
+                    I agree to AgenticVoice.net's <a href="/privacy-policy" className="text-primary hover:underline">Privacy Policy</a> and consent to being contacted about my demo request.
                   </span>
                 </label>
               </div>
               
-              <button type="submit" className="btn btn-primary w-full sm:flex-1">
-                Request Your Demo
+              <button 
+                type="submit" 
+                className="btn btn-primary w-full sm:flex-1"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <>
+                    <span className="loading loading-spinner loading-xs"></span>
+                    Submitting...
+                  </>
+                ) : (
+                  'Request Your Demo'
+                )}
               </button>
             </form>
           </div>

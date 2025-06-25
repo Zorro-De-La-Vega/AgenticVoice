@@ -28,6 +28,18 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 			className={font.className}
 		>
 			<head>
+				{/* Google tag (gtag.js) */}
+				<script async src="https://www.googletagmanager.com/gtag/js?id=G-WDGLK8F7C2"></script>
+				<script
+					dangerouslySetInnerHTML={{
+						__html: `
+							window.dataLayer = window.dataLayer || [];
+							function gtag(){dataLayer.push(arguments);}
+							gtag('js', new Date());
+							gtag('config', 'G-WDGLK8F7C2');
+						`,
+					}}
+				/>
 				{/* Performance testing script - only loads in development mode */}
 				{process.env.NODE_ENV === 'development' && (
 					<script src="/scripts/perf-test.js" async defer />

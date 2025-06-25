@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import User from "@/models/User";
 
 const connectMongo = async () => {
   if (!process.env.MONGODB_URI) {
@@ -7,9 +6,28 @@ const connectMongo = async () => {
       "Add the MONGODB_URI environment variable inside .env.local to use mongoose"
     );
   }
-  return mongoose
-    .connect(process.env.MONGODB_URI)
-    .catch((e) => console.error("Mongoose Client Error: " + e.message));
+
+  // If already connected, return
+  if (mongoose.connections[0].readyState === 1) {
+    return mongoose.connections[0];
+  }
+
+  try {
+    const connection = await mongoose.connect(process.env.MONGODB_URI, {
+      bufferCommands: true,
+      maxPoolSize: 10,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+      connectTimeoutMS: 10000,
+      maxIdleTimeMS: 30000,
+    });
+    
+    console.log("MongoDB connected successfully");
+    return connection;
+  } catch (error) {
+    console.error("Mongoose Client Error:", error);
+    throw error;
+  }
 };
 
 export default connectMongo;
