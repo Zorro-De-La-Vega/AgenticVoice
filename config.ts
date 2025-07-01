@@ -19,70 +19,107 @@ const config = {
     // Create multiple plans in your Stripe dashboard, then add them here. You can add as many plans as you want, just make sure to add the priceId
     plans: [
       {
-        // REQUIRED — we use this to find the plan in the webhook (for instance if you want to update the user's credits based on the plan)
+        // Pay Per Use tier
         priceId:
           process.env.NODE_ENV === "development"
-            ? "price_1Niyy5AxyNprDp7iZIqEyD2h"
-            : "price_456",
-        //  REQUIRED - Name of the plan, displayed on the pricing page
-        name: "Essential",
-        // A friendly description of the plan, displayed on the pricing page. Tip: explain why this plan and not others
-        description: "Perfect for small practices with basic needs",
-        // The price you want to display, the one user will be charged on Stripe.
-        price: 499,
-        // If you have an anchor price (i.e. $29) that you want to display crossed out, put it here. Otherwise, leave it empty
-        priceAnchor: 699,
+            ? "price_1Niyy5AxyNprDp7iZIqEyD2h_payperuse"
+            : "price_payperuse",
+        name: "Pay Per Use",
+        description: "No commitment, perfect for trial users",
+        price: 0,
+        priceNote: "$2.50/minute",
         features: [
-          { name: "1 AI Employee for your practice" },
-          { name: "Up to 5,000 minutes per month" },
-          { name: "Business hours availability (8am-6pm)" },
-          { name: "Appointment scheduling" },
-          { name: "Basic FAQ handling" },
-          { name: "Single integration with your EHR/PMS" },
+          { name: "No monthly commitment" },
+          { name: "Pay only for what you use" },
+          { name: "Premium rate at $2.50/minute" },
+          { name: "Basic features access" },
           { name: "Email support" },
+          { name: "Ideal for testing and low-volume needs" },
+        ],
+        isPayPerUse: true,
+      },
+      {
+        // Starter tier
+        priceId:
+          process.env.NODE_ENV === "development"
+            ? "price_1Niyy5AxyNprDp7iZIqEyD2h_starter"
+            : "price_starter",
+        name: "Starter",
+        description: "For small medical practices & solo law practitioners",
+        price: 899,
+        priceAnchor: 1250,
+        features: [
+          { name: "500 minutes included ($1.80/min value)" },
+          { name: "1 AI voice agent" },
+          { name: "Basic automation & call routing" },
+          { name: "Standard integrations" },
+          { name: "Setup & training included" },
+          { name: "Email support" },
+          { name: "Perfect for 50-150 calls/day" },
         ],
       },
       {
+        // Professional tier - Most Popular
         priceId:
           process.env.NODE_ENV === "development"
             ? "price_1O5KtcAxyNprDp7iftKnrrpw_professional"
-            : "price_456",
-        // This plan will look different on the pricing page, it will be highlighted. You can only have one plan with isFeatured: true
+            : "price_professional",
         isFeatured: true,
         name: "Professional",
-        description: "The complete solution for growing practices",
-        price: 899,
-        priceAnchor: 1299,
+        description: "Optimal for medium medical practices & small law firms",
+        price: 1599,
+        priceAnchor: 2150,
         features: [
-          { name: "2 AI Employees for your practice" },
-          { name: "Up to 12,000 minutes per month" },
-          { name: "24/7 availability" },
-          { name: "Advanced appointment management" },
-          { name: "Custom voice and personality options" },
-          { name: "Patient/client intake automation" },
-          { name: "Integrations with up to 3 systems" },
-          { name: "Priority email and chat support" },
+          { name: "1,200 minutes included ($1.33/min value)" },
+          { name: "2 AI voice agents" },
+          { name: "Full HIPAA/legal compliance" },
+          { name: "Priority support" },
+          { name: "Advanced call analytics" },
+          { name: "Custom voice training" },
+          { name: "Multiple system integrations" },
+          { name: "Ideal for 150-400 calls/day" },
         ],
       },
       {
+        // Business tier
+        priceId:
+          process.env.NODE_ENV === "development"
+            ? "price_1O5KtcAxyNprDp7iftKnrrpw_business"
+            : "price_business",
+        name: "Business",
+        description: "For large practices & multi-location firms",
+        price: 2899,
+        priceAnchor: 3750,
+        features: [
+          { name: "3,000 minutes included ($0.97/min value)" },
+          { name: "5 AI voice agents" },
+          { name: "Custom integrations" },
+          { name: "Advanced analytics & reporting" },
+          { name: "Dedicated support team" },
+          { name: "Staff training included" },
+          { name: "Multi-location support" },
+          { name: "Perfect for high-volume practices" },
+        ],
+      },
+      {
+        // Enterprise tier
         priceId:
           process.env.NODE_ENV === "development"
             ? "price_1O5KtcAxyNprDp7iftKnrrpw_enterprise"
-            : "price_789",
+            : "price_enterprise",
         name: "Enterprise",
-        description: "Custom solution for large multi-location practices",
-        price: 1799,
-        priceAnchor: 2499,
+        description: "For hospital systems & large law firms",
+        price: 6999,
+        priceAnchor: 9999,
         features: [
-          { name: "5+ AI Employees for your practice" },
-          { name: "Unlimited minutes" },
-          { name: "24/7 availability with priority routing" },
-          { name: "Multi-location support" },
-          { name: "Custom workflows and scripts" },
-          { name: "HIPAA/compliance documentation" },
-          { name: "Unlimited integrations" },
+          { name: "10,000 minutes included ($0.70/min value)" },
+          { name: "Unlimited AI voice agents" },
+          { name: "White-label options available" },
+          { name: "SLA guarantees" },
+          { name: "Custom development" },
           { name: "Dedicated account manager" },
-          { name: "24/7 phone and email support" },
+          { name: "24/7 phone support" },
+          { name: "Custom pricing for overages" },
         ],
       },
     ],

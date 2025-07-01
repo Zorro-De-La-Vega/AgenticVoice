@@ -54,11 +54,15 @@ const CTA = () => {
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log('=== FORM SUBMISSION STARTED ===');
+    console.log('Form data:', formData);
+    
     setIsSubmitting(true);
     setSubmitError(null);
     
     try {
       // Send form data to the API endpoint
+      console.log('Sending request to /api/demo...');
       const response = await fetch('/api/demo', {
         method: 'POST',
         headers: {
@@ -67,13 +71,16 @@ const CTA = () => {
         body: JSON.stringify(formData)
       });
       
+      console.log('Response status:', response.status);
       const result = await response.json();
+      console.log('Response data:', result);
       
       if (!response.ok) {
         throw new Error(result.error || result.message || 'Failed to submit demo request');
       }
       
       // Show success message and reset form
+      console.log('✅ Form submitted successfully!');
       setSubmitSuccess(true);
       setFormData({
         name: "",
@@ -91,7 +98,7 @@ const CTA = () => {
       }, 5000);
       
     } catch (error: any) {
-      console.error('Error submitting demo request:', error);
+      console.error('❌ Error submitting demo request:', error);
       setSubmitError(error.message || 'Something went wrong. Please try again.');
     } finally {
       setIsSubmitting(false);

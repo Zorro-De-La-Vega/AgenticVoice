@@ -5,7 +5,6 @@ import type { JSX } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import logo from "@/app/icon.png";
 import config from "@/config";
 import AuthButtons from "./AuthButtons";
 
@@ -65,10 +64,9 @@ const Header = () => {
             title={`${config.appName} homepage`}
           >
             <Image
-              src={logo}
+              src="/logo.svg"
               alt={`${config.appName} logo`}
               className="w-8"
-              placeholder="blur"
               priority={true}
               width={48}
               height={48}
@@ -137,10 +135,9 @@ const Header = () => {
               href="/"
             >
               <Image
-                src={logo}
+                src="/logo.svg"
                 alt={`${config.appName} logo`}
                 className="w-8"
-                placeholder="blur"
                 priority={true}
                 width={48}
                 height={48}

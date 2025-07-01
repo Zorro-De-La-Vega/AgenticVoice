@@ -298,7 +298,10 @@ export default function SystemConfig() {
     }
   };
 
-  const saveConfiguration = async (section: string, data: any) => {
+  const saveConfiguration = async (
+    section: string, 
+    data: ConfigSettings['general'] | ConfigSettings['database'] | { vapi: ConfigSettings['vapi']; email: ConfigSettings['email']; authentication: ConfigSettings['authentication'] }
+  ) => {
     setSaving(true);
     try {
       const response = await fetch('/api/admin/system/config', {

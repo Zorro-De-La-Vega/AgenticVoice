@@ -34,12 +34,6 @@ interface RevenueData {
   users: number;
 }
 
-// Define the structure of role distribution data
-interface RoleData {
-  role: string;
-  count: number;
-}
-
 export default function BillingManagement() {
   const [billingStats, setBillingStats] = useState<BillingStats | null>(null);
   const [revenueData, setRevenueData] = useState<RevenueData[]>([]);
@@ -76,7 +70,7 @@ export default function BillingManagement() {
         let paidUsers = 0;
         let freeUsers = 0;
 
-        roleDistribution.forEach((roleData: any) => {
+        roleDistribution.forEach((roleData: { role: string; count: number }) => {
           const role = roleData.role;
           const count = roleData.count;
           const price = rolePricing[role as UserRole] || 0;
@@ -99,10 +93,10 @@ export default function BillingManagement() {
           totalUsers,
           paidUsers,
           freeUsers,
-          roleDistribution: roleDistribution.reduce((acc: Record<string, number>, roleData: RoleData) => {
-            acc[roleData.role] = roleData.count;
+          roleDistribution: roleDistribution.reduce((acc: Record<UserRole, number>, roleData: { role: string; count: number }) => {
+            acc[roleData.role as UserRole] = roleData.count;
             return acc;
-          }, {} as Record<string, number>)
+          }, {} as Record<UserRole, number>)
         });
 
         // Generate revenue trend data (simplified)

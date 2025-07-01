@@ -9,10 +9,12 @@ const connectMongo = async () => {
 
   // If already connected, return
   if (mongoose.connections[0].readyState === 1) {
+    console.log("MongoDB already connected");
     return mongoose.connections[0];
   }
 
   try {
+    console.log("Connecting to MongoDB...");
     const connection = await mongoose.connect(process.env.MONGODB_URI, {
       bufferCommands: true,
       maxPoolSize: 10,
@@ -22,10 +24,12 @@ const connectMongo = async () => {
       maxIdleTimeMS: 30000,
     });
     
-    console.log("MongoDB connected successfully");
+    const dbName = connection.connections[0].db?.databaseName;
+    console.log(`✅ MongoDB connected successfully to database: ${dbName}`);
+    
     return connection;
   } catch (error) {
-    console.error("Mongoose Client Error:", error);
+    console.error("❌ Mongoose Client Error:", error);
     throw error;
   }
 };

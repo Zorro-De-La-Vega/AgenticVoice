@@ -97,7 +97,7 @@ export default function MarketInsights() {
           <div className="flex items-start justify-between mb-3">
             <div className="flex-1">
               <div className="flex items-center space-x-2 mb-2">
-                <Badge variant="default" className="text-xs">
+                <Badge variant="secondary" className="text-xs">
                   {trend.category}
                 </Badge>
                 <Badge className={getSentimentColor(trend.sentiment)}>

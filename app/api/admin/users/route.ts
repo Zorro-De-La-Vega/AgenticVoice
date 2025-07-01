@@ -158,7 +158,7 @@ export async function POST(request: NextRequest) {
       createdAt: new Date(),
       updatedAt: new Date(),
       loginCount: 0,
-      emailVerified: null as Date | null
+      isEmailVerified: false
     };
 
     const result = await usersCollection.insertOne(newUser);

@@ -8,7 +8,7 @@ import ButtonCheckout from "./ButtonCheckout";
 const Pricing = () => {
   return (
     <section className="bg-base-200 overflow-hidden" id="pricing">
-      <div className="py-24 px-8 max-w-6xl mx-auto">
+      <div className="py-24 px-8 max-w-7xl mx-auto">
         <div className="flex flex-col text-center w-full mb-16">
           <h2 className="font-extrabold text-3xl md:text-4xl lg:text-5xl tracking-tight mb-4">
             Hire Your <span className="text-primary">AI Employee</span> Today
@@ -18,67 +18,67 @@ const Pricing = () => {
           </p>
         </div>
 
-        <div className="relative flex justify-center flex-col lg:flex-row items-center lg:items-stretch gap-8">
+        <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 items-stretch pt-4">
           {config.stripe.plans.map((plan) => (
-            <div key={plan.priceId} className="relative w-full max-w-lg">
-              {plan.isFeatured && (
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-                  <span
-                    className={`badge text-xs text-primary-content font-semibold border-0 bg-primary`}
-                  >
-                    POPULAR
-                  </span>
-                </div>
-              )}
-
+            <div key={plan.priceId} className="relative w-full">
               {plan.isFeatured && (
                 <div
-                  className={`absolute -inset-[1px] rounded-[9px] bg-primary z-10`}
+                  className={`absolute -inset-[1px] rounded-[9px] bg-purple-600 z-10`}
                 ></div>
               )}
 
-              <div className="relative flex flex-col h-full gap-5 lg:gap-8 z-10 bg-base-100 p-8 rounded-lg">
-                <div className="flex justify-between items-center gap-4">
-                  <div>
-                    <p className="text-lg lg:text-xl font-bold">{plan.name}</p>
-                    {plan.description && (
-                      <p className="text-base-content/80 mt-2">
-                        {plan.description}
-                      </p>
-                    )}
+              <div className="relative flex flex-col h-full gap-5 lg:gap-6 z-10 bg-base-100 p-6 rounded-lg">
+                {plan.isFeatured && (
+                  <div className="absolute top-0 left-0 right-0 bg-purple-600 text-white text-xs font-bold text-center py-2 -mx-6 -mt-6 rounded-t-lg">
+                    MOST POPULAR
                   </div>
+                )}
+                <div className={`flex flex-col gap-2 ${plan.isFeatured ? 'mt-6' : ''}`}>
+                  <p className="text-lg lg:text-xl font-bold">{plan.name}</p>
+                  {plan.description && (
+                    <p className="text-sm text-base-content/80">
+                      {plan.description}
+                    </p>
+                  )}
                 </div>
-                <div className="flex gap-2">
+                
+                <div className="flex flex-col gap-1">
                   {plan.priceAnchor && (
-                    <div className="flex flex-col justify-end mb-[4px] text-lg ">
-                      <p className="relative">
+                    <div className="flex gap-2 items-center">
+                      <p className="relative text-base-content/60">
                         <span className="absolute bg-base-content h-[1.5px] inset-x-0 top-[53%]"></span>
-                        <span className="text-base-content/80">
-                          ${plan.priceAnchor}
-                        </span>
+                        <span>${plan.priceAnchor}</span>
                       </p>
                     </div>
                   )}
-                  <p className={`text-5xl tracking-tight font-extrabold`}>
-                    ${plan.price}
-                  </p>
-                  <div className="flex flex-col justify-end">
-                    <div className="flex flex-col">
-                      <p className="text-xs text-base-content/60 uppercase font-semibold">
+                  {plan.isPayPerUse ? (
+                    <div>
+                      <p className="text-2xl font-bold text-primary">{plan.priceNote}</p>
+                      <p className="text-xs text-base-content/60 uppercase font-semibold mt-1">
+                        No monthly fee
+                      </p>
+                    </div>
+                  ) : (
+                    <div>
+                      <p className={`text-3xl lg:text-4xl tracking-tight font-extrabold`}>
+                        ${plan.price}
+                      </p>
+                      <p className="text-xs text-base-content/60 uppercase font-semibold mt-1">
                         USD/month
                       </p>
                     </div>
-                  </div>
+                  )}
                 </div>
+                
                 {plan.features && (
-                  <ul className="space-y-2.5 leading-relaxed text-base flex-1">
+                  <ul className="space-y-2 leading-relaxed text-sm flex-1">
                     {plan.features.map((feature, i) => (
-                      <li key={i} className="flex items-center gap-2">
+                      <li key={i} className="flex items-start gap-2">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 20 20"
                           fill="currentColor"
-                          className="w-[18px] h-[18px] opacity-80 shrink-0"
+                          className="w-4 h-4 opacity-80 shrink-0 mt-0.5"
                         >
                           <path
                             fillRule="evenodd"
@@ -93,12 +93,19 @@ const Pricing = () => {
                   </ul>
                 )}
                 <div className="space-y-3">
-                  <ButtonCheckout priceId={plan.priceId} />
+                  <ButtonCheckout priceId={plan.priceId} planName={plan.name} />
 
-                  <p className="flex items-center justify-center gap-2 text-sm text-center text-base-content/80 font-medium relative">
+                  <p className="flex items-center justify-center gap-2 text-xs text-center text-base-content/60 font-medium relative">
                     {plan.name === "Professional" ? 
-                      "Most popular plan for single-location practices" : 
-                      "Monthly subscription with no long-term contract"}
+                      "Best value for growing practices" : 
+                      plan.name === "Pay Per Use" ?
+                      "Try risk-free today" :
+                      plan.name === "Starter" ?
+                      "Great for getting started" :
+                      plan.name === "Business" ?
+                      "Scale with confidence" :
+                      "Custom solutions available"
+                    }
                   </p>
                 </div>
               </div>

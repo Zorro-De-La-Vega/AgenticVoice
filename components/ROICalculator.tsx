@@ -20,12 +20,11 @@ const ROICalculator = () => {
     paybackPeriod: 0,
   });
 
-  // Handle input changes
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+  // Handle slider changes
+  const handleSliderChange = (name: string, value: number) => {
     setInputs((prev) => ({
       ...prev,
-      [name]: parseFloat(value) || 0,
+      [name]: value,
     }));
   };
 
@@ -83,139 +82,178 @@ const ROICalculator = () => {
           <div className="bg-base-200 rounded-xl p-5 md:p-8 shadow-lg">
             <h3 className="text-2xl font-bold mb-6">Your Practice Information</h3>
             
-            <div className="space-y-5">
+            <div className="space-y-6">
+              {/* Monthly Call Volume Slider */}
               <div className="form-control w-full">
                 <label className="label">
                   <span className="label-text font-medium">Monthly Call Volume</span>
+                  <span className="label-text-alt font-bold text-primary">{inputs.monthlyCallVolume.toLocaleString()} calls</span>
                 </label>
-                <div className="join w-full">
-                  <input
-                    type="number"
-                    name="monthlyCallVolume"
-                    value={inputs.monthlyCallVolume}
-                    onChange={handleInputChange}
-                    min="0"
-                    className="input input-bordered join-item w-full"
-                  />
-                  <span className="join-item flex items-center justify-center bg-base-300 px-4">calls</span>
+                <input
+                  type="range"
+                  name="monthlyCallVolume"
+                  min="100"
+                  max="2000"
+                  step="50"
+                  value={inputs.monthlyCallVolume}
+                  onChange={(e) => handleSliderChange('monthlyCallVolume', parseInt(e.target.value))}
+                  className="range range-primary"
+                />
+                <div className="w-full flex justify-between text-xs px-2 mt-1">
+                  <span>100</span>
+                  <span>500</span>
+                  <span>1000</span>
+                  <span>1500</span>
+                  <span>2000</span>
                 </div>
               </div>
-              
+
+              {/* Missed Call Percentage Slider */}
               <div className="form-control w-full">
                 <label className="label">
-                  <span className="label-text font-medium">Missed Call Percentage</span>
+                  <span className="label-text font-medium">Missed Call Rate</span>
+                  <span className="label-text-alt font-bold text-primary">{inputs.missedCallPercentage}%</span>
                 </label>
-                <div className="join w-full">
-                  <input
-                    type="number"
-                    name="missedCallPercentage"
-                    value={inputs.missedCallPercentage}
-                    onChange={handleInputChange}
-                    min="0"
-                    max="100"
-                    className="input input-bordered join-item w-full"
-                  />
-                  <span className="join-item flex items-center justify-center bg-base-300 px-4">%</span>
+                <input
+                  type="range"
+                  name="missedCallPercentage"
+                  min="5"
+                  max="50"
+                  step="5"
+                  value={inputs.missedCallPercentage}
+                  onChange={(e) => handleSliderChange('missedCallPercentage', parseInt(e.target.value))}
+                  className="range range-primary"
+                />
+                <div className="w-full flex justify-between text-xs px-2 mt-1">
+                  <span>5%</span>
+                  <span>15%</span>
+                  <span>25%</span>
+                  <span>35%</span>
+                  <span>50%</span>
                 </div>
               </div>
-              
+
+              {/* Average Patient/Client Value Slider */}
               <div className="form-control w-full">
                 <label className="label">
-                  <span className="label-text font-medium">Average Patient Value</span>
+                  <span className="label-text font-medium">Average Client Value</span>
+                  <span className="label-text-alt font-bold text-primary">${inputs.avgPatientValue}</span>
                 </label>
-                <div className="join w-full">
-                  <span className="join-item flex items-center justify-center bg-base-300 px-4">$</span>
-                  <input
-                    type="number"
-                    name="avgPatientValue"
-                    value={inputs.avgPatientValue}
-                    onChange={handleInputChange}
-                    min="0"
-                    className="input input-bordered join-item w-full"
-                  />
+                <input
+                  type="range"
+                  name="avgPatientValue"
+                  min="50"
+                  max="1000"
+                  step="50"
+                  value={inputs.avgPatientValue}
+                  onChange={(e) => handleSliderChange('avgPatientValue', parseInt(e.target.value))}
+                  className="range range-primary"
+                />
+                <div className="w-full flex justify-between text-xs px-2 mt-1">
+                  <span>$50</span>
+                  <span>$250</span>
+                  <span>$500</span>
+                  <span>$750</span>
+                  <span>$1000</span>
                 </div>
               </div>
-              
+
+              {/* Monthly Staff Hours on Phone Slider */}
               <div className="form-control w-full">
                 <label className="label">
-                  <span className="label-text font-medium">Monthly Staff Hours on Phone</span>
+                  <span className="label-text font-medium">Staff Hours on Phone/Month</span>
+                  <span className="label-text-alt font-bold text-primary">{inputs.monthlyStaffHours} hours</span>
                 </label>
-                <div className="join w-full">
-                  <input
-                    type="number"
-                    name="monthlyStaffHours"
-                    value={inputs.monthlyStaffHours}
-                    onChange={handleInputChange}
-                    min="0"
-                    className="input input-bordered join-item w-full"
-                  />
-                  <span className="join-item flex items-center justify-center bg-base-300 px-4">hrs</span>
+                <input
+                  type="range"
+                  name="monthlyStaffHours"
+                  min="40"
+                  max="400"
+                  step="20"
+                  value={inputs.monthlyStaffHours}
+                  onChange={(e) => handleSliderChange('monthlyStaffHours', parseInt(e.target.value))}
+                  className="range range-primary"
+                />
+                <div className="w-full flex justify-between text-xs px-2 mt-1">
+                  <span>40</span>
+                  <span>120</span>
+                  <span>200</span>
+                  <span>280</span>
+                  <span>400</span>
                 </div>
               </div>
-              
+
+              {/* Hourly Staff Cost Slider */}
               <div className="form-control w-full">
                 <label className="label">
                   <span className="label-text font-medium">Hourly Staff Cost</span>
+                  <span className="label-text-alt font-bold text-primary">${inputs.hourlyStaffCost}/hour</span>
                 </label>
-                <div className="join w-full">
-                  <span className="join-item flex items-center justify-center bg-base-300 px-4">$</span>
-                  <input
-                    type="number"
-                    name="hourlyStaffCost"
-                    value={inputs.hourlyStaffCost}
-                    onChange={handleInputChange}
-                    min="0"
-                    className="input input-bordered join-item w-full"
-                  />
+                <input
+                  type="range"
+                  name="hourlyStaffCost"
+                  min="15"
+                  max="50"
+                  step="5"
+                  value={inputs.hourlyStaffCost}
+                  onChange={(e) => handleSliderChange('hourlyStaffCost', parseInt(e.target.value))}
+                  className="range range-primary"
+                />
+                <div className="w-full flex justify-between text-xs px-2 mt-1">
+                  <span>$15</span>
+                  <span>$25</span>
+                  <span>$35</span>
+                  <span>$45</span>
+                  <span>$50</span>
                 </div>
               </div>
             </div>
           </div>
           
           {/* Calculator results */}
-          <div className="bg-primary text-primary-content rounded-xl p-5 md:p-8 shadow-lg flex flex-col justify-between">
+          <div className="bg-base-200 rounded-xl p-5 md:p-8 shadow-lg flex flex-col justify-between">
             <div>
-              <h3 className="text-2xl font-bold mb-6">Your Potential Savings</h3>
+              <h3 className="text-2xl font-bold mb-6 text-gray-900">Your Potential Savings</h3>
               
               <div className="space-y-8">
                 <div>
-                  <h4 className="text-base md:text-lg font-medium opacity-90">Annual Revenue Recovered</h4>
-                  <p className="text-3xl md:text-4xl font-extrabold mt-2">
+                  <h4 className="text-base md:text-lg font-medium text-gray-700">Annual Revenue Recovered</h4>
+                  <p className="text-3xl md:text-4xl font-extrabold mt-2 text-purple-700">
                     ${results.missedCallRevenue.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                   </p>
-                  <p className="mt-1 opacity-75">From previously missed calls</p>
+                  <p className="mt-1 text-gray-600">From previously missed calls</p>
                 </div>
                 
                 <div>
-                  <h4 className="text-base md:text-lg font-medium opacity-90">Annual Staff Cost Savings</h4>
-                  <p className="text-3xl md:text-4xl font-extrabold mt-2">
+                  <h4 className="text-base md:text-lg font-medium text-gray-700">Annual Staff Cost Savings</h4>
+                  <p className="text-3xl md:text-4xl font-extrabold mt-2 text-purple-700">
                     ${results.staffTimeSavings.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                   </p>
-                  <p className="mt-1 opacity-75">From reduced time on phone calls</p>
+                  <p className="mt-1 text-gray-600">From reduced time on phone calls</p>
                 </div>
                 
-                <div className="pt-4 border-t border-primary-content/20">
-                  <h4 className="text-base md:text-lg font-medium opacity-90">Return on Investment</h4>
-                  <p className="text-3xl md:text-4xl font-extrabold mt-2">
+                <div className="pt-4 border-t border-gray-300">
+                  <h4 className="text-base md:text-lg font-medium text-gray-700">Return on Investment</h4>
+                  <p className="text-3xl md:text-4xl font-extrabold mt-2 text-purple-700">
                     {results.annualROI.toLocaleString(undefined, { maximumFractionDigits: 0 })}%
                   </p>
-                  <p className="mt-1 opacity-75">Annual ROI</p>
+                  <p className="mt-1 text-gray-600">Annual ROI</p>
                 </div>
                 
                 <div>
-                  <h4 className="text-base md:text-lg font-medium opacity-90">Payback Period</h4>
-                  <p className="text-3xl md:text-4xl font-extrabold mt-2">
+                  <h4 className="text-base md:text-lg font-medium text-gray-700">Payback Period</h4>
+                  <p className="text-3xl md:text-4xl font-extrabold mt-2 text-purple-700">
                     {results.paybackPeriod < 1 
                       ? "< 1 month" 
                       : `${results.paybackPeriod.toLocaleString(undefined, { maximumFractionDigits: 1 })} months`}
                   </p>
-                  <p className="mt-1 opacity-75">Time to recover investment</p>
+                  <p className="mt-1 text-gray-600">Time to recover investment</p>
                 </div>
               </div>
             </div>
             
             <div className="mt-8">
-              <button className="btn btn-lg w-full bg-white text-primary hover:bg-white/90 border-none">
+              <button className="btn btn-lg w-full btn-primary text-white">
                 Get Your Custom ROI Analysis
               </button>
             </div>

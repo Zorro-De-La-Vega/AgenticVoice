@@ -351,7 +351,7 @@ const FAQ = () => {
                 onClick={() => setActiveCategory(category.name)}
                 className={`px-4 py-2 rounded-full transition-all ${
                   activeCategory === category.name
-                    ? "bg-primary text-primary-content"
+                    ? "bg-purple-700 text-white"
                     : "bg-base-300 hover:bg-base-300/80 text-base-content"
                 }`}
               >

@@ -270,7 +270,7 @@ const Solution = () => {
               {/* Phone call visualization */}
               <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-56 sm:w-64 md:w-80 bg-base-100 rounded-xl shadow-xl overflow-hidden">
                 {/* Phone header */}
-                <div className="bg-primary text-primary-content p-4">
+                <div className="bg-purple-700 text-white p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -290,7 +290,7 @@ const Solution = () => {
                     </div>
                   </div>
                   <div className="flex items-start gap-2 justify-end">
-                    <div className="bg-primary text-primary-content p-2 rounded-lg rounded-tr-none text-sm max-w-[80%]">
+                    <div className="bg-purple-600 text-white p-2 rounded-lg rounded-tr-none text-sm max-w-[80%]">
                       <p>Hi, I need to reschedule my appointment for tomorrow.</p>
                     </div>
                   </div>
