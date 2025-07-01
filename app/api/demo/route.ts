@@ -34,6 +34,57 @@ export async function POST(req: Request) {
     const demoRequest = await DemoRequest.create(data);
     console.log('✅ Demo request created:', demoRequest._id);
     
+    // Send data to n8n webhook
+    console.log('Sending data to n8n webhook...');
+    try {
+      // Map time slot values to readable format
+      const timeSlotMap: { [key: string]: string } = {
+        'morning': 'Morning (9am - 12pm)',
+        'afternoon': 'Afternoon (1pm - 5pm)',
+        'custom': 'Request a custom time'
+      };
+      
+      // Map practice types to readable format
+      const practiceTypeMap: { [key: string]: string } = {
+        'medical-primary': 'Medical - Primary Care',
+        'medical-specialty': 'Medical - Specialty',
+        'dental': 'Dental',
+        'legal-general': 'Legal - General Practice',
+        'legal-specialty': 'Legal - Specialty',
+        'other': 'Other'
+      };
+      
+      const n8nPayload = {
+        full_name: data.name,
+        email: data.email,
+        phone_number: data.phone,
+        practice_type: practiceTypeMap[data.practiceType] || data.practiceType,
+        preferred_time_slot: timeSlotMap[data.preferredTime] || data.preferredTime,
+        additional_information: data.message || '',
+        privacy_policy_agreed: data.agreeToTerms
+      };
+      
+      console.log('n8n payload:', JSON.stringify(n8nPayload, null, 2));
+      
+      const n8nResponse = await fetch('https://fenago.app.n8n.cloud/webhook/lead-intake', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(n8nPayload)
+      });
+      
+      if (!n8nResponse.ok) {
+        console.error('❌ n8n webhook returned error:', n8nResponse.status, n8nResponse.statusText);
+        // Don't throw error - continue with success even if webhook fails
+      } else {
+        console.log('✅ Data sent to n8n webhook successfully');
+      }
+    } catch (webhookError) {
+      console.error('❌ Error sending to n8n webhook:', webhookError);
+      // Don't throw error - continue with success even if webhook fails
+    }
+    
     // Return success response with the created demo request
     return NextResponse.json(
       { 

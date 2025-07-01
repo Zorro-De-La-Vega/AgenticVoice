@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { smoothScrollTo } from '@/utils/smoothScroll';
 
 // ROI Calculator component to estimate potential savings and ROI
 const ROICalculator = () => {
@@ -253,7 +254,10 @@ const ROICalculator = () => {
             </div>
             
             <div className="mt-8">
-              <button className="btn btn-lg w-full btn-primary text-white">
+              <button 
+                className="btn btn-lg w-full btn-primary text-white"
+                onClick={() => smoothScrollTo('demo')}
+              >
                 Get Your Custom ROI Analysis
               </button>
             </div>

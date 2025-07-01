@@ -1,48 +1,79 @@
-import Image from "next/image";
+"use client";
 
-// Stat card component for problem statistics
-const StatCard = ({ value, description }: { value: string; description: string }) => {
+import Image from "next/image";
+import { FadeIn, GradientReveal, PulseGlow, ColorTemperature } from "@/components/animations";
+import { motion } from "framer-motion";
+
+// Stat card component with gradient reveal and pulse glow
+const StatCard = ({ value, description, delay = 0 }: { value: string; description: string; delay?: number }) => {
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 text-center">
-      <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{value}</h3>
-      <p className="text-sm md:text-base text-gray-800">{description}</p>
-    </div>
+    <FadeIn delay={delay} direction="up">
+      <PulseGlow pulseColor="from-red-400/10 to-pink-400/10" className="h-full">
+        <motion.div 
+          className="bg-white rounded-lg shadow-md p-6 text-center h-full"
+          whileHover={{ y: -5, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)" }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
+          <h3 className="text-3xl md:text-4xl font-bold mb-2">
+            <GradientReveal gradientColors="from-red-500 via-pink-500 to-primary-purple">
+              {value}
+            </GradientReveal>
+          </h3>
+          <p className="text-sm md:text-base text-gray-800">{description}</p>
+        </motion.div>
+      </PulseGlow>
+    </FadeIn>
   );
 };
 
 // Problem section component focused on the hidden cost of missed calls
 const Problem = () => {
   return (
-    <section className="bg-neutral text-neutral-content py-16 md:py-24">
-      <div className="max-w-7xl mx-auto px-8">
+    <ColorTemperature 
+      className="bg-neutral text-neutral-content py-16 md:py-24"
+      coolColor="rgba(59, 130, 246, 0.05)"
+      warmColor="rgba(239, 68, 68, 0.08)"
+    >
+      <section className="w-full">
+        <div className="max-w-7xl mx-auto px-8">
         {/* Section header */}
-        <div className="text-center mb-16">
-          <h2 className="font-extrabold text-3xl md:text-4xl lg:text-5xl tracking-tight mb-4 text-white">
-            The Hidden Cost of Missed Calls
-          </h2>
-          <p className="max-w-2xl mx-auto text-lg text-white opacity-90 leading-relaxed">
-            Every unanswered call is a missed opportunity—whether it's a new patient or a potential client.
-          </p>
-        </div>
+        <FadeIn>
+          <div className="text-center mb-16">
+            <h2 className="font-extrabold text-3xl md:text-4xl lg:text-5xl tracking-tight mb-4 text-white">
+              The Hidden Cost of Missed Calls
+            </h2>
+            <p className="max-w-2xl mx-auto text-lg text-white opacity-90 leading-relaxed">
+              Every unanswered call is a missed opportunity—whether it’s a new patient or a potential client.
+            </p>
+          </div>
+        </FadeIn>
         
         {/* Problem statistics */}
         <div className="grid md:grid-cols-3 gap-6 mb-16">
           <StatCard 
             value="37%" 
-            description="of callers never call back if they reach voicemail" 
+            description="of callers never call back if they reach voicemail"
+            delay={0.2} 
           />
           <StatCard 
             value="$50,000+" 
-            description="in potential annual revenue lost from missed calls" 
+            description="in potential annual revenue lost from missed calls"
+            delay={0.4} 
           />
           <StatCard 
             value="67%" 
-            description="of clients report frustration with office phone accessibility" 
+            description="of clients report frustration with office phone accessibility"
+            delay={0.6} 
           />
         </div>
         
         {/* Problem scenario */}
-        <div className="bg-neutral-focus rounded-xl overflow-hidden shadow-xl">
+        <FadeIn delay={0.8} direction="up">
+          <motion.div 
+            className="bg-neutral-focus rounded-xl overflow-hidden shadow-xl"
+            whileHover={{ scale: 1.01 }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
           <div className="space-y-8">
             {/* Images Section - Two side by side */}
             <div className="grid md:grid-cols-2 gap-4 p-8 pb-0">
@@ -116,9 +147,11 @@ const Problem = () => {
               </div>
             </div>
           </div>
-        </div>
+          </motion.div>
+        </FadeIn>
       </div>
-    </section>
+      </section>
+    </ColorTemperature>
   );
 };
 

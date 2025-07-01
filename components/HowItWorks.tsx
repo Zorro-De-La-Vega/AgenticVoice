@@ -1,4 +1,9 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { FadeIn, GradientText, FloatingDot, StepCard, IntegrationLogo, TabSwitch } from "@/components/animations";
 
 // Define the steps for how AgenticVoice.net works
 const steps = [
@@ -97,8 +102,8 @@ const steps = [
   },
 ];
 
-// Integration partners logos
-const integrationPartners = [
+// Healthcare integration partners
+const healthcareIntegrations = [
   { name: "Epic", logo: "/images/integrations/epic.svg" },
   { name: "Cerner", logo: "/images/integrations/cerner.svg" },
   { name: "Allscripts", logo: "/images/integrations/allscripts.svg" },
@@ -107,36 +112,79 @@ const integrationPartners = [
   { name: "eClinicalWorks", logo: "/images/integrations/eclinicalworks.svg" },
 ];
 
+// Legal integration partners
+const legalIntegrations = [
+  { name: "Clio", logo: "/images/integrations/clio.svg" },
+  { name: "MyCase", logo: "/images/integrations/mycase.svg" },
+  { name: "PracticePanther", logo: "/images/integrations/practicepanther.svg" },
+  { name: "LawPay", logo: "/images/integrations/lawpay.svg" },
+  { name: "Rocket Matter", logo: "/images/integrations/rocketmatter.svg" },
+  { name: "Smokeball", logo: "/images/integrations/smokeball.svg" },
+];
+
 const HowItWorks = () => {
+  const [activeTab, setActiveTab] = useState("healthcare");
+  
   return (
-    <section className="py-16 md:py-24 bg-base-200" id="how-it-works">
-      <div className="container px-4 md:px-6">
-        <div className="flex flex-col text-center w-full mb-16">
-          <h2 className="font-extrabold text-3xl md:text-4xl lg:text-5xl tracking-tight mb-4">
-            How <span className="text-primary">AgenticVoice</span> Works
-          </h2>
-          <p className="text-lg md:text-xl max-w-3xl mx-auto text-base-content/70">
-            Our implementation process is designed to be seamless, with minimal disruption to your practice. From consultation to optimization, we handle everything so your new <span className="text-primary font-medium">AI Employee</span> can start working for you right away.
-          </p>
-        </div>
+    <section className="py-16 md:py-24 bg-base-200 relative overflow-hidden" id="how-it-works">
+      {/* Background gradient mesh */}
+      <motion.div
+        className="absolute inset-0 opacity-30"
+        animate={{
+          background: [
+            "radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.1) 0%, transparent 50%)",
+            "radial-gradient(circle at 80% 50%, rgba(236, 72, 153, 0.1) 0%, transparent 50%)",
+            "radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.1) 0%, transparent 50%)",
+          ],
+        }}
+        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+      />
+      
+      <div className="container px-4 md:px-6 relative">
+        <FadeIn>
+          <div className="flex flex-col text-center w-full mb-16">
+            <h2 className="font-extrabold text-3xl md:text-4xl lg:text-5xl tracking-tight mb-4">
+              How <GradientText>AgenticVoice</GradientText> Works
+            </h2>
+            <p className="text-lg md:text-xl max-w-3xl mx-auto text-base-content/70">
+              Our implementation process is designed to be seamless, with minimal disruption to your practice. From consultation to optimization, we handle everything so your new <span className="text-primary font-medium">AI Employee</span> can start working for you right away.
+            </p>
+          </div>
+        </FadeIn>
 
         {/* Steps section */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
           {steps.map((step, index) => (
-            <div key={index} className="relative flex flex-col items-start">
-              {/* Step number */}
-              <div className="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-primary/10 text-primary">
+            <StepCard key={index} index={index} className="flex flex-col items-start">
+              {/* Step icon with hover animation */}
+              <motion.div 
+                className="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-primary/10 text-primary"
+                whileHover={{ rotate: 360 }}
+                transition={{ duration: 0.8, ease: "easeInOut" }}
+              >
                 {step.icon}
-              </div>
+              </motion.div>
               
-              {/* Step number badge */}
-              <div className="absolute -top-3 -right-3 w-10 h-10 rounded-full bg-primary flex items-center justify-center text-primary-content font-bold shadow-lg">
+              {/* Step number badge with glow */}
+              <motion.div 
+                className="absolute -top-3 -right-3 w-12 h-12 rounded-full bg-gradient-to-br from-purple-200 to-pink-200 flex items-center justify-center text-gray-900 font-extrabold shadow-xl text-lg border-2 border-purple-300"
+                animate={{
+                  boxShadow: [
+                    "0 10px 20px -3px rgba(139, 92, 246, 0.4)",
+                    "0 10px 30px -3px rgba(139, 92, 246, 0.6)",
+                    "0 10px 20px -3px rgba(139, 92, 246, 0.4)",
+                  ],
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
                 {step.number}
-              </div>
+              </motion.div>
 
-              {/* Line connector (except for last item) */}
+              {/* Line connector with floating dots */}
               {index < steps.length - 1 && (
                 <div className="hidden lg:block absolute top-8 left-16 w-[calc(100%+2rem)] h-0.5 bg-base-300">
+                  <FloatingDot delay={index * 0.5} />
+                  <FloatingDot delay={index * 0.5 + 1.5} />
                   <div className="absolute right-0 -top-1.5 w-4 h-4 rotate-45 border-t-2 border-r-2 border-base-300"></div>
                 </div>
               )}
@@ -144,33 +192,71 @@ const HowItWorks = () => {
               {/* Step content */}
               <h3 className="text-xl font-bold mb-2">{step.title}</h3>
               <p className="text-base-content/70">{step.description}</p>
-            </div>
+            </StepCard>
           ))}
         </div>
 
         {/* Integration partners section */}
-        <div className="mt-16">
-          <h3 className="text-xl md:text-2xl font-bold text-center mb-8">
-            Seamlessly Integrates With Your Existing Systems
-          </h3>
-          
-          <div className="flex flex-wrap justify-center items-center gap-6 md:gap-10 py-6 px-4 bg-base-100 rounded-xl">
-            {/* Placeholder for integration logos */}
-            {integrationPartners.map((partner, index) => (
-              <div key={index} className="flex items-center justify-center w-24 h-16 md:w-32 md:h-20 opacity-60 hover:opacity-100 transition-opacity">
-                <div className="text-lg font-semibold text-base-content/70">{partner.name}</div>
-                {/* If you have actual logo files, use this instead:
-                <Image
-                  src={partner.logo}
-                  alt={`${partner.name} logo`}
-                  width={100}
-                  height={40}
-                  className="object-contain w-full h-full"
-                /> */}
-              </div>
-            ))}
+        <FadeIn delay={0.8}>
+          <div className="mt-16">
+            <h3 className="text-xl md:text-2xl font-bold text-center mb-8">
+              Seamlessly Integrates With Your Existing Systems
+            </h3>
+            
+            <TabSwitch
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+              tabs={[
+                {
+                  id: "healthcare",
+                  label: "Healthcare",
+                  content: (
+                    <div className="flex flex-wrap justify-center items-center gap-6 md:gap-10 py-6 px-4 bg-base-300 rounded-xl shadow-lg">
+                      {healthcareIntegrations.map((partner, index) => (
+                        <IntegrationLogo key={index} delay={index * 0.1} className="w-24 h-16 md:w-32 md:h-20">
+                          <div className="flex items-center justify-center w-full h-full opacity-80 hover:opacity-100 transition-opacity">
+                            <div className="text-lg font-bold text-base-content">{partner.name}</div>
+                            {/* If you have actual logo files, use this instead:
+                            <Image
+                              src={partner.logo}
+                              alt={`${partner.name} logo`}
+                              width={100}
+                              height={40}
+                              className="object-contain w-full h-full"
+                            /> */}
+                          </div>
+                        </IntegrationLogo>
+                      ))}
+                    </div>
+                  ),
+                },
+                {
+                  id: "legal",
+                  label: "Legal",
+                  content: (
+                    <div className="flex flex-wrap justify-center items-center gap-6 md:gap-10 py-6 px-4 bg-base-300 rounded-xl shadow-lg">
+                      {legalIntegrations.map((partner, index) => (
+                        <IntegrationLogo key={index} delay={index * 0.1} className="w-24 h-16 md:w-32 md:h-20">
+                          <div className="flex items-center justify-center w-full h-full opacity-80 hover:opacity-100 transition-opacity">
+                            <div className="text-lg font-bold text-base-content">{partner.name}</div>
+                            {/* If you have actual logo files, use this instead:
+                            <Image
+                              src={partner.logo}
+                              alt={`${partner.name} logo`}
+                              width={100}
+                              height={40}
+                              className="object-contain w-full h-full"
+                            /> */}
+                          </div>
+                        </IntegrationLogo>
+                      ))}
+                    </div>
+                  ),
+                },
+              ]}
+            />
           </div>
-        </div>
+        </FadeIn>
       </div>
     </section>
   );
